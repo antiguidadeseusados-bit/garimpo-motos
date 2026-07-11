@@ -93,16 +93,27 @@
       content: "✓ Visto";
     }
 
-    /* Quente: borda vermelha só neste card */
+    /* Quente: fundo azul */
+    .item-wrap:has(input.cb-quente:checked) {
+      border-color: #2563eb;
+      background: #dbeafe;
+    }
     .item-wrap:has(input.cb-quente:checked) .card {
-      border-color: #dc2626;
-      box-shadow: 0 0 0 2px #fca5a5;
+      background: #dbeafe;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 2px #93c5fd;
     }
     .item-wrap:has(input.cb-quente:checked) .card .card-header {
-      background: #fee2e2;
+      background: #1d4ed8;
+      color: white;
+    }
+    .item-wrap:has(input.cb-quente:checked) .card .card-header .modelo,
+    .item-wrap:has(input.cb-quente:checked) .card .card-header .preco,
+    .item-wrap:has(input.cb-quente:checked) .card .card-header .cidade {
+      color: white;
     }
     .item-wrap:has(input.cb-quente:checked) .card label.btn-quente {
-      background: #dc2626;
+      background: #1d4ed8;
       color: white;
     }
     .item-wrap:has(input.cb-quente:checked) .card label.btn-quente::before {
