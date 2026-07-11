@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>Garimpo de Motos — Duilio</title>
+  <meta name="description" content="Anúncios de motos particulares em Sorocaba, Votorantim, Araçoiaba e Piedade abaixo da FIPE.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Garimpo de Motos — Duilio">
+  <meta property="og:description" content="Anúncios de motos particulares abaixo da FIPE.">
+  <meta property="og:image" content="__ZAPIA_SITE_ORIGIN__/_z/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="__ZAPIA_SITE_ORIGIN__/_z/og.png">
+  <link rel="manifest" href="__ZAPIA_SITE_URL__/manifest.webmanifest">
+  <meta name="theme-color" content="#b91c1c">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Garimpo Motos">
+  <link rel="apple-touch-icon" href="__ZAPIA_SITE_URL__/apple-touch-icon.png">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f3f4f6;
+      color: #111;
+      padding: 16px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    header {
+      background: #b91c1c;
+      color: white;
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+    }
+    header h1 { font-size: 1.2rem; font-weight: 700; }
+    header p  { font-size: 0.8rem; opacity: 0.85; margin-top: 4px; }
+
+    .aviso {
+      background: #fef9c3;
+      border: 1px solid #fbbf24;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 0.78rem;
+      color: #78350f;
+      margin-bottom: 20px;
+    }
+
+    /* esconde os checkboxes reais */
+    input[type="checkbox"] { display: none; }
+
+    /* wrapper de cada anúncio */
+    .item-wrap {
+      border: 2px solid #111;
+      border-radius: 14px;
+      margin-bottom: 18px;
+      overflow: hidden;
+      background: white;
+    }
+
+    /* card */
+    .card {
+      background: white;
+      border-radius: 0;
+      margin-bottom: 0;
+      border: none;
+      overflow: hidden;
+      transition: opacity 0.3s, background 0.3s;
+    }
+
+    /* Já vi: pinta o wrapper inteiro de vermelho claro */
+    .item-wrap:has(input.cb-visto:checked) {
+      border-color: #f87171;
+      background: #fee2e2;
+    }
+    .item-wrap:has(input.cb-visto:checked) .card {
+      background: #fee2e2;
+      opacity: 0.6;
+    }
+    .item-wrap:has(input.cb-visto:checked) .card .card-body {
+      text-decoration: line-through;
+      color: #b91c1c;
+    }
+    .item-wrap:has(input.cb-visto:checked) .card label.btn-visto {
+      background: #dc2626;
+      color: white;
+    }
+    .item-wrap:has(input.cb-visto:checked) .card label.btn-visto::before {
+      content: "✓ Visto";
+    }
+
+    /* Quente: borda vermelha só neste card */
+    .item-wrap:has(input.cb-quente:checked) .card {
+      border-color: #dc2626;
+      box-shadow: 0 0 0 2px #fca5a5;
+    }
+    .item-wrap:has(input.cb-quente:checked) .card .card-header {
+      background: #fee2e2;
+    }
+    .item-wrap:has(input.cb-quente:checked) .card label.btn-quente {
+      background: #dc2626;
+      color: white;
+    }
+    .item-wrap:has(input.cb-quente:checked) .card label.btn-quente::before {
+      content: "🔥 Quente!";
+    }
+
+    label.card-wrap {
+      display: block;
+      cursor: pointer;
+    }
+
+    .card-header {
+      background: #fef2f2;
+      padding: 10px 14px 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .modelo { font-weight: 700; font-size: 0.95rem; color: #111; }
+    .margem {
+      background: #b91c1c;
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .card-body {
+      padding: 10px 14px;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: #374151;
+    }
+    .card-body .preco { font-size: 1rem; font-weight: 700; color: #111; }
+    .card-body .fipe  { font-size: 0.78rem; color: #6b7280; }
+    .card-body .cidade { font-size: 0.78rem; color: #6b7280; margin-top: 2px; }
+
+    .card-footer {
+      padding: 8px 14px 12px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .btn-link {
+      display: inline-block;
+      background: #1d4ed8;
+      color: white;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 7px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+    }
+
+    label.btn-visto {
+      display: inline-block;
+      background: #e5e7eb;
+      color: #374151;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 7px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      user-select: none;
+    }
+    label.btn-visto::before { content: "Já vi"; }
+
+    label.btn-quente {
+      display: inline-block;
+      background: #fee2e2;
+      color: #dc2626;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 7px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      user-select: none;
+    }
+    label.btn-quente::before { content: "🔥 Quente"; }
+
+    .fonte {
+      font-size: 0.7rem;
+      color: #9ca3af;
+      margin-left: auto;
+    }
+
+    .data-atualizacao {
+      text-align: center;
+      font-size: 0.75rem;
+      color: #9ca3af;
+      margin-top: 24px;
+      margin-bottom: 8px;
+    }
+
+    .varrida-header {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 10px 4px 6px;
+      border-top: 3px solid #111;
+      margin-top: 8px;
+      margin-bottom: 10px;
+    }
+    .varrida-header:first-child {
+      border-top: none;
+      margin-top: 0;
+    }
+
+
+    .btn-msg {
+      display: inline-block;
+      background: #2563eb;
+      color: white;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 7px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      border: none;
+      user-select: none;
+      transition: background 0.2s;
+    }
+    .btn-msg:active { background: #1d4ed8; }
+
+
+    .msg-box {
+      padding: 10px 14px 12px;
+      background: #eff6ff;
+      border-top: 1px solid #bfdbfe;
+    }
+    .msg-label {
+      display: block;
+      font-size: 0.72rem;
+      color: #2563eb;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    .msg-text {
+      width: 100%;
+      font-size: 0.85rem;
+      color: #1e3a5f;
+      background: white;
+      border: 1px solid #bfdbfe;
+      border-radius: 6px;
+      padding: 8px;
+      resize: none;
+      font-family: inherit;
+      line-height: 1.4;
+    }
+
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🏍️ Garimpo de Motos</h1>
+  <p>Sorocaba · Votorantim · Araçoiaba · Piedade — só particular, abaixo da FIPE</p>
+</header>
+
+<div class="aviso">
+  💡 Toque em <strong>Já vi</strong> para riscar um anúncio que você já viu, ou em <strong>🔥 Quente</strong> para destacar os que valem a pena. Funciona nesta aba — se fechar e abrir, volta ao normal.
+</div>
+
+<!-- ===================== ANÚNCIOS ===================== -->
+
+<!-- 1 -->
+<div class="varrida-header">🔍 Varrida — 11/07/2026 às 13h17 · Anúncios anteriores</div>
+<div class="item-wrap">
+<input type="checkbox" class="cb-visto" id="v1">
+<input type="checkbox" class="cb-quente" id="qv1">
+<div class="card">
+  <div class="card-header">
+    <span class="modelo">CG 160 Titan 2024</span>
+    <span class="margem">−R$ 5.000 da FIPE</span>
+  </div>
+</div>
+  <div class="card-body">
+    <div class="preco">R$ 13.500</div>
+    <div class="fipe">FIPE R$ 18.500 · 8.500 km · quitada</div>
+    <div class="cidade">📍 Sorocaba</div>
+  </div>
+  <div class="card-footer">
+    <a class="btn-link" href="https://www.facebook.com/marketplace/item/2848339892191029/" target="_blank">Ver anúncio</a>
+    <label class="btn-visto" for="v1"></label>
+    <label class="btn-quente" for="qv1"></label>
+    <span class="fonte">Facebook</span>
+  
+  
+  
+  </div>
+<div class="msg-box"><span class="msg-label">💬 Toque para copiar a mensagem:</span><textarea class="msg-text" readonly rows="2">Oi amigo! Vi seu anúncio da CG 160 Titan 2024 no Marketplace. Ainda tá disponível?</textarea></div>
+</div>
+
+<!-- 2 -->
+<div class="item-wrap">
+<input type="checkbox" class="cb-visto" id="v2">
+<input type="checkbox" class="cb-quente" id="qv2">
+<div class="card">
+  <div class="card-header">
+    <span class="modelo">Factor 150 2014</span>
+    <span class="margem">−R$ 3.700 da FIPE</span>
+  </div>
+</div>
+  <div class="card-body">
+    <div class="preco">R$ 7.300</div>
+    <div class="fipe">FIPE R$ 11.000</div>
+    <div class="cidade">📍 Sorocaba</div>
+  </div>
+  <div class="card-footer">
+    <a class="btn-link" href="https://www.facebook.com/marketplace/item/2131383000756483/" target="_blank">Ver anúncio</a>
+    <label class="btn-visto" for="v2"></label>
+    <label class="btn-quente" for="qv2"></label>
+    <span class="fonte">Facebook</span>
+  
+  
+  
+  </div>
+<div class="msg-box"><span class="msg-label">💬 Toque para copiar a mensagem:</span><textarea class="msg-text" readonly rows="2">Olá pessoal, tudo bem? Vi a Factor 150 2014 que você tá vendendo. Pode me contar mais?</textarea></div>
+</div>
+
+<!-- 3 -->
+<div class="item-wrap">
+<input type="checkbox" class="cb-visto" id="v3">
+<input type="checkbox" class="cb-quente" id="qv3">
+<div class="card">
+  <div class="card-header">
+    <span class="modelo">Factor 150 2012</span>
+    <span class="margem">−R$ 3.500 da FIPE</span>
+  </div>
+</div>
+  <div class="card-body">
+    <div class="preco">R$ 7.500</div>
+    <div class="fipe">FIPE R$ 11.000</div>
+    <div class="cidade">📍 Sorocaba</div>
+  </div>
+  <div class="card-footer">
+    <a class="btn-link" href="https://www.facebook.com/marketplace/item/798233243312061/" target="_blank">Ver anúncio</a>
+    <label class="btn-visto" for="v3"></label>
+    <label class="btn-quente" for="qv3"></label>
+    <span class="fonte">Facebook</span>
+  
+  
+  
+  </div>
+<div class="msg-box"><span class="msg-label">💬 Toque para copiar a mensagem:</span><textarea class="msg-text" readonly rows="2">Oi moço! Tô procurando uma Factor 150 2012 na região. Ainda tem interesse em vender?</textarea></div>
+</div>
+
+<!-- 4 -->
+<div class="item-wrap">
+<input type="checkbox" class="cb-visto" id="v4">
+<input type="checkbox" class="cb-quente" id="qv4">
+<div class="card">
+  <div class="card-header">
+    <span class="modelo">CG 160 Titan 2022</span>
+    <span class="margem">−R$ 3.400 da FIPE</span>
+  </div>
+</div>
+  <div class="card-body">
+    <div class="preco">R$ 13.600</div>
+    <div class="fipe">FIPE R$ 17.002 · 76.000 km · único dono</div>
+    <div class="cidade">📍 Sorocaba</div>
+  </div>
+  <div class="card-footer">
+    <a class="btn-link" href="https://www.facebook.com/marketplace/item/986039883762795/" target="_blank">Ver anúncio</a>
+    <label class="btn-visto" for="v4"></label>
+    <label class="btn-quente" for="qv4"></label>
+    <span class="fonte">Facebook</span>
+  
+  
+  
+  </div>
+<div class="msg-box"><span class="msg-label">💬 Toque para copiar a mensagem:</span><textarea class="msg-text" readonly rows="2">E aí cara! Vi que você tá vendendo uma CG 160 Titan 2022. Ainda disponível pra ver?</textarea></div>
+</div>
+
+<!-- 5 -->
+<div class="item-wrap">
+<input type="checkbox" class="cb-visto" id="v5">
+<input type="checkbox" class="cb-quente" id="qv5">
+<div class="card">
+  <div class="card-header">
+    <span class="modelo">Fazer FZ15 2023</span>
+    <span class="margem">−R$ 3.400 da FIPE</span>
+  </div>
+</div>
+  <div class="card-body">
+    <div class="preco">R$ 13.600</div>
+    <div class="fipe">FIPE R$ 17.000</div>
+    <div class="cidade">📍 Sorocaba</div>
+  </div>
+  <div class="card-footer">
+    <a class="btn-link" href="https://www.facebook.com/marketplace/item/2011888989412760/" target="_blank">Ver anúncio</a>
+    <label class="btn-visto" for="v5"></label>
+    <label class="btn-quente" for="qv5"></label>
+    <span class="fonte">Facebook</span>
+  
+  
+  
+  </div>
+<div class="msg-box"><span class="msg-label">💬 Toque para copiar a mensagem:</span><textarea class="msg-text" readonly rows="2">Oi parceiro, boa tarde! Tô interessado na Fazer FZ15 2023 do seu anúncio. Aceita proposta?</textarea></div>
+</div>
+
+<!-- 6 -->
+<div class="item-wrap">
+<input type="checkbox" class="cb-visto" id="v6">
+<input type="checkbox" class="cb-quente" id="qv6">
+<div class="card">
+  <div class="card-header">
+    <span class="modelo">CG 160 Titan 2018</span>
+    <span class="margem">−R$ 2.700 da FIPE</span>
+  </div>
+</div>
+  <div class="card-body">
+    <div class="preco">R$ 12.000</div>
+    <div class="fipe">FIPE R$ 14.700</div>
+    <div class="cidade">📍 Sorocaba</div>
+  </div>
+  <div class="card-footer">
+    <a class="btn-link" href="https://www.facebook.com/marketplace/item/1502406084358084/" target="_blank">Ver anúncio</a>
+    <label class="btn-visto" for="v6"></label>
+    <label class="btn-quente" for="qv6"></label>
+    <span class="fonte">Facebook</span>
+  
+  
+  
+  </div>
+<div class="msg-box"><span class="msg-label">💬 Toque para copiar a mensagem:</span><textarea class="msg-text" readonly rows="2">Oi amigo! Vi seu anúncio da CG 160 Titan 2018 no Marketplace. Ainda tá disponível?</textarea></div>
+</div>
+
+<!-- 7 -->
+<div class="item-wrap">
+<input type="checkbox" class="cb-visto" id="v7">
+<input type="checkbox" class="cb-quente" id="qv7">
+<div class="card">
+  <div class="card-header">
+    <span class="modelo">CG 150 Fan 2012</span>
+    <span class="margem">−R$ 2.600 da FIPE</span>
+  </div>
+</div>
+  <div class="card-body">
+    <div class="preco">R$ 8.500</div>
+    <div class="fipe">FIPE R$ 11.100</div>
+    <div class="cidade">📍 Sorocaba</div>
+  </div>
+  <div class="card-footer">
+    <a class="btn-link" href="https://www.facebook.com/marketplace/item/1007056552077659/" target="_blank">Ver anúncio</a>
+    <label class="btn-visto" for="v7"></label>
+    <label class="btn-quente" for="qv7"></label>
+    <span class="fonte">Facebook</span>
+  
+  
+  
+  </div>
+<div class="msg-box"><span class="msg-label">💬 Toque para copiar a mensagem:</span><textarea class="msg-text" readonly rows="2">Olá pessoal, tudo bem? Vi a CG 150 Fan 2012 que você tá vendendo. Pode me contar mais?</textarea></div>
+</div>
+
+<!-- 8 -->
+<div class="item-wrap">
+<input type="checkbox" class="cb-visto" id="v8">
+<input type="checkbox" class="cb-quente" id="qv8">
+<div class="card">
+  <div class="card-header">
+    <span class="modelo">NXR 160 Bros 2020</span>
+    <span class="margem">−R$ 2.569 da FIPE</span>
+  </div>
+</div>
+  <div class="card-body">
+    <div class="preco">R$ 14.500</div>
+    <div class="fipe">FIPE R$ 17.069</div>
+    <div class="cidade">📍 Sorocaba</div>
+  </div>
+  <div class="card-footer">
+    <a class="btn-link" href="https://www.facebook.com/marketplace/item/1512138253181831/" target="_blank">Ver anúncio</a>
+    <label class="btn-visto" for="v8"></label>
+    <label class="btn-quente" for="qv8"></label>
+    <span class="fonte">Facebook</span>
+  
+  
+  
+  </div>
+<div class="msg-box"><span class="msg-label">💬 Toque para copiar a mensagem:</span><textarea class="msg-text" readonly rows="2">Oi moço! Tô procurando uma NXR 160 Bros 2020 na região. Ainda tem interesse em vender?</textarea></div>
+</div>
+
+<!-- 9 -->
+<div class="item-wrap">
+<input type="checkbox" class="cb-visto" id="v9">
+<input type="checkbox" class="cb-quente" id="qv9">
+<div class="card">
+  <div class="card-header">
+    <span class="modelo">CG 150 Fan 2014</span>
+    <span class="margem">−R$ 2.349 da FIPE</span>
+  </div>
+</div>
+  <div class="card-body">
+    <div class="preco">R$ 10.000</div>
+    <div class="fipe">FIPE R$ 12.349</div>
+    <div class="cidade">📍 Sorocaba</div>
+  </div>
+  <div class="card-footer">
+    <a class="btn-link" href="https://www.facebook.com/marketplace/item/1367206618716905/" target="_blank">Ver anúncio</a>
+    <label class="btn-visto" for="v9"></label>
+    <label class="btn-quente" for="qv9"></label>
+    <span class="fonte">Facebook</span>
+  
+  
+  
+  </div>
+<div class="msg-box"><span class="msg-label">💬 Toque para copiar a mensagem:</span><textarea class="msg-text" readonly rows="2">E aí cara! Vi que você tá vendendo uma CG 150 Fan 2014. Ainda disponível pra ver?</textarea></div>
+</div>
+
+<!-- 10 -->
+<div class="item-wrap">
+<input type="checkbox" class="cb-visto" id="v10">
+<input type="checkbox" class="cb-quente" id="qv10">
+<div class="card">
+  <div class="card-header">
+    <span class="modelo">CG 150 Fan 2010</span>
+    <span class="margem">−R$ 2.313 da FIPE</span>
+  </div>
+</div>
+  <div class="card-body">
+    <div class="preco">R$ 7.900</div>
+    <div class="fipe">FIPE R$ 10.213</div>
+    <div class="cidade">📍 Sorocaba</div>
+  </div>
+  <div class="card-footer">
+    <a class="btn-link" href="https://www.facebook.com/marketplace/item/27892177583808945/" target="_blank">Ver anúncio</a>
+    <label class="btn-visto" for="v10"></label>
+    <label class="btn-quente" for="qv10"></label>
+    <span class="fonte">Facebook</span>
+  
+  
+  
+  </div>
+<div class="msg-box"><span class="msg-label">💬 Toque para copiar a mensagem:</span><textarea class="msg-text" readonly rows="2">Oi parceiro, boa tarde! Tô interessado na CG 150 Fan 2010 do seu anúncio. Aceita proposta?</textarea></div>
+</div>
+
+<!-- 11 -->
+<div class="item-wrap">
+<input type="checkbox" class="cb-visto" id="v11">
+<input type="checkbox" class="cb-quente" id="qv11">
+<div class="card">
+  <div class="card-header">
+    <span class="modelo">Factor 150 2010</span>
+    <span class="margem">−R$ 2.500 da FIPE</span>
+  </div>
+</div>
+  <div class="card-body">
+    <div class="preco">R$ 8.500</div>
+    <div class="fipe">FIPE R$ 11.000</div>
+    <div class="cidade">📍 Sorocaba</div>
+  </div>
+  <div class="card-footer">
+    <a class="btn-link" href="https://www.facebook.com/marketplace/item/1078343597981950/" target="_blank">Ver anúncio</a>
+    <label class="btn-visto" for="v11"></label>
+    <label class="btn-quente" for="qv11"></label>
+    <span class="fonte">Facebook</span>
+  
+  
+  
+  </div>
+<div class="msg-box"><span class="msg-label">💬 Toque para copiar a mensagem:</span><textarea class="msg-text" readonly rows="2">Oi amigo! Vi seu anúncio da Factor 150 2010 no Marketplace. Ainda tá disponível?</textarea></div>
+</div>
+
+<!-- 12 -->
+<div class="item-wrap">
+<input type="checkbox" class="cb-visto" id="v12">
+<input type="checkbox" class="cb-quente" id="qv12">
+<div class="card">
+  <div class="card-header">
+    <span class="modelo">CG 150 Fan 2015</span>
+    <span class="margem">−R$ 2.150 da FIPE</span>
+  </div>
+</div>
+  <div class="card-body">
+    <div class="preco">R$ 10.199</div>
+    <div class="fipe">FIPE R$ 12.349</div>
+    <div class="cidade">📍 Sorocaba</div>
+  </div>
+  <div class="card-footer">
+    <a class="btn-link" href="https://www.facebook.com/marketplace/item/1545551153762054/" target="_blank">Ver anúncio</a>
+    <label class="btn-visto" for="v12"></label>
+    <label class="btn-quente" for="qv12"></label>
+    <span class="fonte">Facebook</span>
+  
+  
+  
+  </div>
+<div class="msg-box"><span class="msg-label">💬 Toque para copiar a mensagem:</span><textarea class="msg-text" readonly rows="2">Olá pessoal, tudo bem? Vi a CG 150 Fan 2015 que você tá vendendo. Pode me contar mais?</textarea></div>
+</div>
+
+<!-- 13 -->
+<div class="item-wrap">
+<input type="checkbox" class="cb-visto" id="v13">
+<input type="checkbox" class="cb-quente" id="qv13">
+<div class="card">
+  <div class="card-header">
+    <span class="modelo">Factor 150 2020</span>
+    <span class="margem">−R$ 2.100 da FIPE</span>
+  </div>
+</div>
+  <div class="card-body">
+    <div class="preco">R$ 11.000</div>
+    <div class="fipe">FIPE R$ 13.100</div>
+    <div class="cidade">📍 Sorocaba</div>
+  </div>
+  <div class="card-footer">
+    <a class="btn-link" href="https://www.facebook.com/marketplace/item/1009383938503937/" target="_blank">Ver anúncio</a>
+    <label class="btn-visto" for="v13"></label>
+    <label class="btn-quente" for="qv13"></label>
+    <span class="fonte">Facebook</span>
+  
+  
+  
+  </div>
+<div class="msg-box"><span class="msg-label">💬 Toque para copiar a mensagem:</span><textarea class="msg-text" readonly rows="2">Oi moço! Tô procurando uma Factor 150 2020 na região. Ainda tem interesse em vender?</textarea></div>
+</div>
+
+<!-- 14 -->
+<div class="item-wrap">
+<input type="checkbox" class="cb-visto" id="v14">
+<input type="checkbox" class="cb-quente" id="qv14">
+<div class="card">
+  <div class="card-header">
+    <span class="modelo">CG 150 Titan 2011</span>
+    <span class="margem">−R$ 1.900 da FIPE</span>
+  </div>
+</div>
+  <div class="card-body">
+    <div class="preco">R$ 8.800</div>
+    <div class="fipe">FIPE R$ 10.700</div>
+    <div class="cidade">📍 Sorocaba</div>
+  </div>
+  <div class="card-footer">
+    <a class="btn-link" href="https://www.facebook.com/marketplace/item/776044182234097/" target="_blank">Ver anúncio</a>
+    <label class="btn-visto" for="v14"></label>
+    <label class="btn-quente" for="qv14"></label>
+    <span class="fonte">Facebook</span>
+  
+  
+  
+  </div>
+<div class="msg-box"><span class="msg-label">💬 Toque para copiar a mensagem:</span><textarea class="msg-text" readonly rows="2">E aí cara! Vi que você tá vendendo uma CG 150 Titan 2011. Ainda disponível pra ver?</textarea></div>
+</div>
+
+<!-- 15 -->
+<div class="item-wrap">
+<input type="checkbox" class="cb-visto" id="v15">
+<input type="checkbox" class="cb-quente" id="qv15">
+<div class="card">
+  <div class="card-header">
+    <span class="modelo">CG 160 Titan 2017</span>
+    <span class="margem">−R$ 1.700 da FIPE</span>
+  </div>
+</div>
+  <div class="card-body">
+    <div class="preco">R$ 12.500</div>
+    <div class="fipe">FIPE R$ 14.200</div>
+    <div class="cidade">📍 Sorocaba</div>
+  </div>
+  <div class="card-footer">
+    <a class="btn-link" href="https://www.facebook.com/marketplace/item/2854520524914762/" target="_blank">Ver anúncio</a>
+    <label class="btn-visto" for="v15"></label>
+    <label class="btn-quente" for="qv15"></label>
+    <span class="fonte">Facebook</span>
+  
+  
+  
+  </div>
+<div class="msg-box"><span class="msg-label">💬 Toque para copiar a mensagem:</span><textarea class="msg-text" readonly rows="2">Oi parceiro, boa tarde! Tô interessado na CG 160 Titan 2017 do seu anúncio. Aceita proposta?</textarea></div>
+</div>
+
+<!-- 16 -->
+<div class="item-wrap">
+<input type="checkbox" class="cb-visto" id="v16">
+<input type="checkbox" class="cb-quente" id="qv16">
+<div class="card">
+  <div class="card-header">
+    <span class="modelo">Factor 150 2021</span>
+    <span class="margem">−R$ 1.600 da FIPE</span>
+  </div>
+</div>
+  <div class="card-body">
+    <div class="preco">R$ 12.000</div>
+    <div class="fipe">FIPE R$ 13.600</div>
+    <div class="cidade">📍 Sorocaba</div>
+  </div>
+  <div class="card-footer">
+    <a class="btn-link" href="https://www.facebook.com/marketplace/item/1516709266607825/" target="_blank">Ver anúncio</a>
+    <label class="btn-visto" for="v16"></label>
+    <label class="btn-quente" for="qv16"></label>
+    <span class="fonte">Facebook</span>
+  
+  
+  
+  </div>
+<div class="msg-box"><span class="msg-label">💬 Toque para copiar a mensagem:</span><textarea class="msg-text" readonly rows="2">Oi amigo! Vi seu anúncio da Factor 150 2021 no Marketplace. Ainda tá disponível?</textarea></div>
+</div>
+
+<!-- 17 -->
+<div class="item-wrap">
+<input type="checkbox" class="cb-visto" id="v17">
+<input type="checkbox" class="cb-quente" id="qv17">
+<div class="card">
+  <div class="card-header">
+    <span class="modelo">Fazer 250 2010</span>
+    <span class="margem">−R$ 1.578 da FIPE</span>
+  </div>
+</div>
+  <div class="card-body">
+    <div class="preco">R$ 9.500</div>
+    <div class="fipe">FIPE R$ 11.078</div>
+    <div class="cidade">📍 Sorocaba</div>
+  </div>
+  <div class="card-footer">
+    <a class="btn-link" href="https://www.facebook.com/marketplace/item/1571105461397662/" target="_blank">Ver anúncio</a>
+    <label class="btn-visto" for="v17"></label>
+    <label class="btn-quente" for="qv17"></label>
+    <span class="fonte">Facebook</span>
+  
+  
+  
+  </div>
+<div class="msg-box"><span class="msg-label">💬 Toque para copiar a mensagem:</span><textarea class="msg-text" readonly rows="2">Olá pessoal, tudo bem? Vi a Fazer 250 2010 que você tá vendendo. Pode me contar mais?</textarea></div>
+</div>
+
+<!-- 18 -->
+<div class="item-wrap">
+<input type="checkbox" class="cb-visto" id="v18">
+<input type="checkbox" class="cb-quente" id="qv18">
+<div class="card">
+  <div class="card-header">
+    <span class="modelo">Nmax 160 2021</span>
+    <span class="margem">−R$ 1.510 da FIPE</span>
+  </div>
+</div>
+  <div class="card-body">
+    <div class="preco">R$ 15.990</div>
+    <div class="fipe">FIPE R$ 17.500</div>
+    <div class="cidade">📍 Votorantim</div>
+  </div>
+  <div class="card-footer">
+    <a class="btn-link" href="https://www.facebook.com/marketplace/item/976769485364902/" target="_blank">Ver anúncio</a>
+    <label class="btn-visto" for="v18"></label>
+    <label class="btn-quente" for="qv18"></label>
+    <span class="fonte">Facebook</span>
+  
+  
+  
+  </div>
+<div class="msg-box"><span class="msg-label">💬 Toque para copiar a mensagem:</span><textarea class="msg-text" readonly rows="2">Oi moço! Tô procurando uma Nmax 160 2021 na região. Ainda tem interesse em vender?</textarea></div>
+</div>
+
+<!-- 19 OLX -->
+<div class="item-wrap">
+<input type="checkbox" class="cb-visto" id="v19">
+<input type="checkbox" class="cb-quente" id="qv19">
+<div class="card">
+  <div class="card-header">
+    <span class="modelo">CG 160 Fan 2020</span>
+    <span class="margem">−R$ 1.917 da FIPE</span>
+  </div>
+</div>
+  <div class="card-body">
+    <div class="preco">R$ 14.000</div>
+    <div class="fipe">FIPE R$ 15.917 · 88.000 km · particular</div>
+    <div class="cidade">📍 Sorocaba</div>
+  </div>
+  <div class="card-footer">
+    <a class="btn-link" href="https://sp.olx.com.br/regiao-de-sorocaba/autos-e-pecas/motos/cg-160-fan-1515702420" target="_blank">Ver anúncio</a>
+    <label class="btn-visto" for="v19"></label>
+    <label class="btn-quente" for="qv19"></label>
+    <span class="fonte">OLX</span>
+  
+  
+  
+  </div>
+<div class="msg-box"><span class="msg-label">💬 Toque para copiar a mensagem:</span><textarea class="msg-text" readonly rows="2">E aí cara! Vi que você tá vendendo uma CG 160 Fan 2020. Ainda disponível pra ver?</textarea></div>
+</div>
+
+<p class="data-atualizacao">Atualizado em 11/07/2026 · 19 anúncios</p>
+
+
+<script>
+// Restaurar estado salvo
+document.querySelectorAll('input.cb-visto, input.cb-quente').forEach(function(cb) {
+  if (localStorage.getItem(cb.id) === '1') cb.checked = true;
+});
+
+// Salvar estado ao mudar
+document.addEventListener('change', function(e) {
+  if (e.target.matches('input.cb-visto, input.cb-quente')) {
+    localStorage.setItem(e.target.id, e.target.checked ? '1' : '0');
+  }
+});
+
+// Copiar mensagem ao clicar na textarea
+document.addEventListener('click', function(e) {
+  var ta = e.target.closest('.msg-text');
+  if (!ta) return;
+  ta.select();
+  document.execCommand('copy');
+  var label = ta.previousElementSibling;
+  if (label) {
+    label.textContent = '✅ Copiado! Agora cole no chat do Facebook.';
+    setTimeout(function() { label.textContent = '💬 Toque para copiar a mensagem:'; }, 3000);
+  }
+});
+</script>
+</body>
+</html>
