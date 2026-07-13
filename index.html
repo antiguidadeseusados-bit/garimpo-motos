@@ -43,138 +43,152 @@
     header h1 { font-size: 1.2rem; font-weight: 700; }
     header p  { font-size: 0.8rem; opacity: 0.85; margin-top: 4px; }
 
-    .aviso {
-      background: #fef9c3;
-      border: 1px solid #fbbf24;
-      border-radius: 8px;
-      padding: 10px 14px;
-      font-size: 0.78rem;
-      color: #78350f;
-      margin-bottom: 20px;
-    }
-
     /* esconde os checkboxes reais */
     input[type="checkbox"] { display: none; }
 
     /* wrapper de cada anúncio */
     .item-wrap {
-      border: 2px solid #111;
+      border: 2px solid #d1d5db;
       border-radius: 14px;
       margin-bottom: 18px;
       overflow: hidden;
       background: white;
+      transition: background 0.25s, border-color 0.25s, opacity 0.25s;
     }
 
-    /* card */
-    .card {
-      background: white;
-      border-radius: 0;
-      margin-bottom: 0;
-      border: none;
-      overflow: hidden;
-      transition: opacity 0.3s, background 0.3s;
-    }
-
-    /* Já vi: pinta o wrapper inteiro de vermelho claro */
+    /* ── JÁ VI: card inteiro vermelho escuro ── */
     .item-wrap:has(input.cb-visto:checked) {
-      border-color: #f87171;
-      background: #fee2e2;
+      border-color: #7f1d1d;
+      background: #7f1d1d;
+      opacity: 0.55;
     }
-    .item-wrap:has(input.cb-visto:checked) .card {
-      background: #fee2e2;
-      opacity: 0.6;
+    .item-wrap:has(input.cb-visto:checked) .card-header {
+      background: #991b1b;
     }
-    .item-wrap:has(input.cb-visto:checked) .card .card-body {
+    .item-wrap:has(input.cb-visto:checked) .card-header .modelo,
+    .item-wrap:has(input.cb-visto:checked) .card-header .cidade {
+      color: #fecaca;
+    }
+    .item-wrap:has(input.cb-visto:checked) .card-header .fipe-badge {
+      background: #450a0a;
+      color: #fca5a5;
+    }
+    .item-wrap:has(input.cb-visto:checked) .card-body {
+      background: #7f1d1d;
+      color: #fecaca;
       text-decoration: line-through;
-      color: #b91c1c;
     }
-    .item-wrap:has(input.cb-visto:checked) .card label.btn-visto {
-      background: #dc2626;
-      color: white;
+    .item-wrap:has(input.cb-visto:checked) .card-footer {
+      background: #7f1d1d;
     }
-    .item-wrap:has(input.cb-visto:checked) .card label.btn-visto::before {
-      content: "✓ Visto";
+    .item-wrap:has(input.cb-visto:checked) label.btn-visto {
+      background: #450a0a;
+      color: #fca5a5;
     }
 
-    /* Quente: fundo azul */
+    /* ── QUENTE: azul ── */
     .item-wrap:has(input.cb-quente:checked) {
-      border-color: #2563eb;
-      background: #dbeafe;
+      border-color: #1d4ed8;
+      background: #eff6ff;
     }
-    .item-wrap:has(input.cb-quente:checked) .card {
-      background: #dbeafe;
-      border-color: #2563eb;
-      box-shadow: 0 0 0 2px #93c5fd;
+    .item-wrap:has(input.cb-quente:checked) .card-header {
+      background: #1d4ed8;
     }
-    .item-wrap:has(input.cb-quente:checked) .card .card-header {
+    .item-wrap:has(input.cb-quente:checked) .card-header .modelo,
+    .item-wrap:has(input.cb-quente:checked) .card-header .cidade {
+      color: white;
+    }
+    .item-wrap:has(input.cb-quente:checked) .card-header .fipe-badge {
+      background: #172554;
+      color: #bfdbfe;
+    }
+    .item-wrap:has(input.cb-quente:checked) label.btn-quente {
       background: #1d4ed8;
       color: white;
     }
-    .item-wrap:has(input.cb-quente:checked) .card .card-header .modelo,
-    .item-wrap:has(input.cb-quente:checked) .card .card-header .preco,
-    .item-wrap:has(input.cb-quente:checked) .card .card-header .cidade {
-      color: white;
-    }
-    .item-wrap:has(input.cb-quente:checked) .card label.btn-quente {
-      background: #1d4ed8;
-      color: white;
-    }
-    .item-wrap:has(input.cb-quente:checked) .card label.btn-quente::before {
-      content: "🔥 Quente!";
-    }
 
-    label.card-wrap {
-      display: block;
-      cursor: pointer;
-    }
-
+    /* ── CARD HEADER ── */
     .card-header {
       background: #fef2f2;
       padding: 10px 14px 8px;
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 6px;
+      align-items: flex-start;
+      gap: 8px;
     }
-    .modelo { font-weight: 700; font-size: 0.95rem; color: #111; }
-    .margem {
+    .header-left {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      flex: 1;
+    }
+    .modelo { font-weight: 700; font-size: 1rem; color: #111; }
+    .cidade { font-size: 0.75rem; color: #6b7280; }
+
+    /* Badge FIPE no canto direito */
+    .fipe-badge {
       background: #b91c1c;
       color: white;
-      font-size: 0.75rem;
-      font-weight: 700;
-      padding: 3px 8px;
-      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 5px 10px;
+      border-radius: 8px;
       white-space: nowrap;
+      text-align: center;
+      line-height: 1.3;
+      flex-shrink: 0;
     }
+    .fipe-badge .abaixo { font-size: 0.65rem; font-weight: 600; opacity: 0.9; display: block; }
 
+    /* ── CARD BODY ── */
     .card-body {
-      padding: 10px 14px;
+      padding: 10px 14px 8px;
       font-size: 0.85rem;
       line-height: 1.6;
       color: #374151;
+      background: white;
     }
-    .card-body .preco { font-size: 1rem; font-weight: 700; color: #111; }
-    .card-body .fipe  { font-size: 0.78rem; color: #6b7280; }
-    .card-body .cidade { font-size: 0.78rem; color: #6b7280; margin-top: 2px; }
+    .preco { font-size: 1.05rem; font-weight: 700; color: #111; }
+    .fipe-text { font-size: 0.75rem; color: #9ca3af; margin-top: 1px; }
+    .desc { font-size: 0.8rem; color: #6b7280; margin-top: 4px; }
 
+    /* ── CARD FOOTER ── */
     .card-footer {
       padding: 8px 14px 12px;
+      background: white;
       display: flex;
-      gap: 8px;
+      gap: 7px;
       align-items: center;
+      flex-wrap: wrap;
     }
 
-    .btn-link {
+    .btn-ver {
       display: inline-block;
       background: #1d4ed8;
       color: white;
       font-size: 0.8rem;
       font-weight: 600;
-      padding: 7px 14px;
+      padding: 7px 13px;
       border-radius: 8px;
       text-decoration: none;
+      white-space: nowrap;
     }
+
+    .btn-msg {
+      display: inline-block;
+      background: #16a34a;
+      color: white;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 7px 13px;
+      border-radius: 8px;
+      cursor: pointer;
+      border: none;
+      user-select: none;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+    .btn-msg:active { background: #15803d; }
 
     label.btn-visto {
       display: inline-block;
@@ -182,38 +196,24 @@
       color: #374151;
       font-size: 0.8rem;
       font-weight: 600;
-      padding: 7px 14px;
+      padding: 7px 13px;
       border-radius: 8px;
       cursor: pointer;
       user-select: none;
+      white-space: nowrap;
     }
-    label.btn-visto::before { content: "Já vi"; }
 
     label.btn-quente {
       display: inline-block;
-      background: #fee2e2;
-      color: #dc2626;
+      background: #dbeafe;
+      color: #1d4ed8;
       font-size: 0.8rem;
       font-weight: 600;
-      padding: 7px 14px;
+      padding: 7px 13px;
       border-radius: 8px;
       cursor: pointer;
       user-select: none;
-    }
-    label.btn-quente::before { content: "🔥 Quente"; }
-
-    .fonte {
-      font-size: 0.7rem;
-      color: #9ca3af;
-      margin-left: auto;
-    }
-
-    .data-atualizacao {
-      text-align: center;
-      font-size: 0.75rem;
-      color: #9ca3af;
-      margin-top: 24px;
-      margin-bottom: 8px;
+      white-space: nowrap;
     }
 
     .varrida-header {
@@ -227,219 +227,192 @@
       letter-spacing: 0.02em;
     }
 
-
-    .btn-msg {
-      display: inline-block;
-      background: #2563eb;
-      color: white;
-      font-size: 0.8rem;
-      font-weight: 600;
-      padding: 7px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      border: none;
-      user-select: none;
-      transition: background 0.2s;
+    .data-atualizacao {
+      text-align: center;
+      font-size: 0.75rem;
+      color: #9ca3af;
+      margin-top: 24px;
+      margin-bottom: 8px;
     }
-    .btn-msg:active { background: #1d4ed8; }
-
-
-    .msg-box {
-      padding: 10px 14px 12px;
-      background: #eff6ff;
-      border-top: 1px solid #bfdbfe;
-    }
-    .msg-label {
-      display: block;
-      font-size: 0.72rem;
-      color: #2563eb;
-      font-weight: 600;
-      margin-bottom: 5px;
-    }
-    .msg-text {
-      width: 100%;
-      font-size: 0.85rem;
-      color: #1e3a5f;
-      background: white;
-      border: 1px solid #bfdbfe;
-      border-radius: 6px;
-      padding: 8px;
-      resize: none;
-      font-family: inherit;
-      line-height: 1.4;
-    }
-
   </style>
 </head>
 <body>
 
 <header>
   <h1>🏍️ Garimpo de Motos</h1>
-  <p>Sorocaba · Votorantim · Araçoiaba · Piedade — só particular, abaixo da FIPE</p>
+  <p>Sorocaba — só particular, abaixo da FIPE</p>
 </header>
-
-<div class="aviso">
-  💡 Toque em <strong>Já vi</strong> para riscar um anúncio que você já viu, ou em <strong>🔥 Quente</strong> para destacar os que valem a pena. Funciona nesta aba — se fechar e abrir, volta ao normal.
-</div>
 
 <!-- ===================== ANÚNCIOS ===================== -->
 
 <div class="varrida-header">🔍 12/07/2026 às 23h02 — 5 novo(s) [fazer 250]</div>
 
-<!-- 3 -->
-<div class="item-wrap new" id="item-v3">
-  <input type="checkbox" class="cb-visto" id="v3"><label for="v3">Visto</label>
-  <input type="checkbox" class="cb-quente" id="qv3"><label for="qv3">🔥 Quente</label>
-  <div class="card">
-    <div class="card-header">
+<div class="item-wrap" id="item-v3">
+  <input type="checkbox" class="cb-visto" id="v3">
+  <input type="checkbox" class="cb-quente" id="qv3">
+  <div class="card-header">
+    <div class="header-left">
       <span class="modelo">Yamaha Fazer 250 2011</span>
-      <span class="preco">R$ 10.000</span>
       <span class="cidade">📍 Sorocaba</span>
     </div>
-    <div class="card-body">
-      <div class="desc">2011 Yamaha fazer</div>
-      <div class="fipe">FIPE: R$ 11.679 · R$ 1.679 abaixo ✅</div>
-    </div>
-    <div class="card-footer">
-      <a href="https://www.facebook.com/marketplace/item/1487949312637700/" target="_blank" class="btn-ver">Ver anúncio</a>
-      <button class="btn-msg" onclick="navigator.clipboard.writeText('Oi! Vi seu anúncio da Fazer 250 2011 no Marketplace. Ainda tá disponível?').then(()=>{this.textContent='✅ Copiado!';setTimeout(()=>{this.textContent='💬 Copiar mensagem'},2000)});window.open('https://www.facebook.com/marketplace/item/1487949312637700/','_blank')">💬 Copiar mensagem</button>
-    </div>
+    <div class="fipe-badge">R$ 1.679<span class="abaixo">abaixo FIPE</span></div>
+  </div>
+  <div class="card-body">
+    <div class="preco">R$ 10.000</div>
+    <div class="fipe-text">FIPE: R$ 11.679</div>
+    <div class="desc">2011 Yamaha fazer</div>
+  </div>
+  <div class="card-footer">
+    <a href="https://www.facebook.com/marketplace/item/1487949312637700/" target="_blank" class="btn-ver">Ver anúncio</a>
+    <button class="btn-msg" onclick="navigator.clipboard.writeText('Oi! Vi seu anúncio da Fazer 250 2011 no Marketplace. Aceita uma proposta?').then(()=>{this.textContent='✅ Copiado!';setTimeout(()=>{this.textContent='💬 Copiar msg'},2000)});window.open('https://www.facebook.com/marketplace/item/1487949312637700/','_blank')">💬 Copiar msg</button>
+    <label class="btn-visto" for="v3">Já vi</label>
+    <label class="btn-quente" for="qv3">🔥 Quente</label>
   </div>
 </div>
 
-<!-- 4 -->
-<div class="item-wrap new" id="item-v4">
-  <input type="checkbox" class="cb-visto" id="v4"><label for="v4">Visto</label>
-  <input type="checkbox" class="cb-quente" id="qv4"><label for="qv4">🔥 Quente</label>
-  <div class="card">
-    <div class="card-header">
+<div class="item-wrap" id="item-v4">
+  <input type="checkbox" class="cb-visto" id="v4">
+  <input type="checkbox" class="cb-quente" id="qv4">
+  <div class="card-header">
+    <div class="header-left">
       <span class="modelo">Yamaha Fazer 250 2023</span>
-      <span class="preco">R$ 14.000</span>
       <span class="cidade">📍 Sorocaba</span>
     </div>
-    <div class="card-body">
-      <div class="desc">2023 Yamaha fazer</div>
-      <div class="fipe">FIPE: R$ 20.979 · R$ 6.979 abaixo ✅</div>
-    </div>
-    <div class="card-footer">
-      <a href="https://www.facebook.com/marketplace/item/1692758488561543/" target="_blank" class="btn-ver">Ver anúncio</a>
-      <button class="btn-msg" onclick="navigator.clipboard.writeText('Olá! Vi a Fazer 250 2023 que você tá vendendo. Pode me contar mais?').then(()=>{this.textContent='✅ Copiado!';setTimeout(()=>{this.textContent='💬 Copiar mensagem'},2000)});window.open('https://www.facebook.com/marketplace/item/1692758488561543/','_blank')">💬 Copiar mensagem</button>
-    </div>
+    <div class="fipe-badge">R$ 6.979<span class="abaixo">abaixo FIPE</span></div>
+  </div>
+  <div class="card-body">
+    <div class="preco">R$ 14.000</div>
+    <div class="fipe-text">FIPE: R$ 20.979</div>
+    <div class="desc">2023 Yamaha fazer</div>
+  </div>
+  <div class="card-footer">
+    <a href="https://www.facebook.com/marketplace/item/1692758488561543/" target="_blank" class="btn-ver">Ver anúncio</a>
+    <button class="btn-msg" onclick="navigator.clipboard.writeText('Oi! Vi a Fazer 250 2023 que você tá vendendo. Aceita uma proposta?').then(()=>{this.textContent='✅ Copiado!';setTimeout(()=>{this.textContent='💬 Copiar msg'},2000)});window.open('https://www.facebook.com/marketplace/item/1692758488561543/','_blank')">💬 Copiar msg</button>
+    <label class="btn-visto" for="v4">Já vi</label>
+    <label class="btn-quente" for="qv4">🔥 Quente</label>
   </div>
 </div>
 
-<!-- 5 -->
-<div class="item-wrap new" id="item-v5">
-  <input type="checkbox" class="cb-visto" id="v5"><label for="v5">Visto</label>
-  <input type="checkbox" class="cb-quente" id="qv5"><label for="qv5">🔥 Quente</label>
-  <div class="card">
-    <div class="card-header">
+<div class="item-wrap" id="item-v5">
+  <input type="checkbox" class="cb-visto" id="v5">
+  <input type="checkbox" class="cb-quente" id="qv5">
+  <div class="card-header">
+    <div class="header-left">
       <span class="modelo">Yamaha Fazer 250 2015</span>
-      <span class="preco">R$ 10.500</span>
       <span class="cidade">📍 Sorocaba</span>
     </div>
-    <div class="card-body">
-      <div class="desc">2015 Yamaha fazer</div>
-      <div class="fipe">FIPE: R$ 14.482 · R$ 3.982 abaixo ✅</div>
-    </div>
-    <div class="card-footer">
-      <a href="https://www.facebook.com/marketplace/item/1854287959313928/" target="_blank" class="btn-ver">Ver anúncio</a>
-      <button class="btn-msg" onclick="navigator.clipboard.writeText('Oi! Tô procurando uma Fazer 250 2015 em Sorocaba. Ainda tem interesse em vender?').then(()=>{this.textContent='✅ Copiado!';setTimeout(()=>{this.textContent='💬 Copiar mensagem'},2000)});window.open('https://www.facebook.com/marketplace/item/1854287959313928/','_blank')">💬 Copiar mensagem</button>
-    </div>
+    <div class="fipe-badge">R$ 3.982<span class="abaixo">abaixo FIPE</span></div>
+  </div>
+  <div class="card-body">
+    <div class="preco">R$ 10.500</div>
+    <div class="fipe-text">FIPE: R$ 14.482</div>
+    <div class="desc">2015 Yamaha fazer</div>
+  </div>
+  <div class="card-footer">
+    <a href="https://www.facebook.com/marketplace/item/1854287959313928/" target="_blank" class="btn-ver">Ver anúncio</a>
+    <button class="btn-msg" onclick="navigator.clipboard.writeText('Oi! Tô interessado na Fazer 250 2015. Aceita uma proposta?').then(()=>{this.textContent='✅ Copiado!';setTimeout(()=>{this.textContent='💬 Copiar msg'},2000)});window.open('https://www.facebook.com/marketplace/item/1854287959313928/','_blank')">💬 Copiar msg</button>
+    <label class="btn-visto" for="v5">Já vi</label>
+    <label class="btn-quente" for="qv5">🔥 Quente</label>
   </div>
 </div>
 
-<!-- 6 -->
-<div class="item-wrap new" id="item-v6">
-  <input type="checkbox" class="cb-visto" id="v6"><label for="v6">Visto</label>
-  <input type="checkbox" class="cb-quente" id="qv6"><label for="qv6">🔥 Quente</label>
-  <div class="card">
-    <div class="card-header">
+<div class="item-wrap" id="item-v6">
+  <input type="checkbox" class="cb-visto" id="v6">
+  <input type="checkbox" class="cb-quente" id="qv6">
+  <div class="card-header">
+    <div class="header-left">
       <span class="modelo">Yamaha Fazer 250 2008</span>
-      <span class="preco">R$ 7.800</span>
       <span class="cidade">📍 Sorocaba</span>
     </div>
-    <div class="card-body">
-      <div class="desc">2008 Yamaha fazer</div>
-      <div class="fipe">FIPE: R$ 10.129 · R$ 2.329 abaixo ✅</div>
-    </div>
-    <div class="card-footer">
-      <a href="https://www.facebook.com/marketplace/item/3064472103742339/" target="_blank" class="btn-ver">Ver anúncio</a>
-      <button class="btn-msg" onclick="navigator.clipboard.writeText('E aí! Vi que você tá vendendo uma Fazer 250 2008. Ainda tá disponível?').then(()=>{this.textContent='✅ Copiado!';setTimeout(()=>{this.textContent='💬 Copiar mensagem'},2000)});window.open('https://www.facebook.com/marketplace/item/3064472103742339/','_blank')">💬 Copiar mensagem</button>
-    </div>
+    <div class="fipe-badge">R$ 2.329<span class="abaixo">abaixo FIPE</span></div>
+  </div>
+  <div class="card-body">
+    <div class="preco">R$ 7.800</div>
+    <div class="fipe-text">FIPE: R$ 10.129</div>
+    <div class="desc">2008 Yamaha fazer</div>
+  </div>
+  <div class="card-footer">
+    <a href="https://www.facebook.com/marketplace/item/3064472103742339/" target="_blank" class="btn-ver">Ver anúncio</a>
+    <button class="btn-msg" onclick="navigator.clipboard.writeText('E aí! Vi que você tá vendendo a Fazer 250 2008. Aceita uma proposta?').then(()=>{this.textContent='✅ Copiado!';setTimeout(()=>{this.textContent='💬 Copiar msg'},2000)});window.open('https://www.facebook.com/marketplace/item/3064472103742339/','_blank')">💬 Copiar msg</button>
+    <label class="btn-visto" for="v6">Já vi</label>
+    <label class="btn-quente" for="qv6">🔥 Quente</label>
   </div>
 </div>
 
-<!-- 7 -->
-<div class="item-wrap new" id="item-v7">
-  <input type="checkbox" class="cb-visto" id="v7"><label for="v7">Visto</label>
-  <input type="checkbox" class="cb-quente" id="qv7"><label for="qv7">🔥 Quente</label>
-  <div class="card">
-    <div class="card-header">
+<div class="item-wrap" id="item-v7">
+  <input type="checkbox" class="cb-visto" id="v7">
+  <input type="checkbox" class="cb-quente" id="qv7">
+  <div class="card-header">
+    <div class="header-left">
       <span class="modelo">Yamaha Fazer 250 2010</span>
-      <span class="preco">R$ 9.500</span>
       <span class="cidade">📍 Sorocaba</span>
     </div>
-    <div class="card-body">
-      <div class="desc">2010 Yamaha fazer</div>
-      <div class="fipe">FIPE: R$ 11.078 · R$ 1.578 abaixo ✅</div>
-    </div>
-    <div class="card-footer">
-      <a href="https://www.facebook.com/marketplace/item/885009201348145/" target="_blank" class="btn-ver">Ver anúncio</a>
-      <button class="btn-msg" onclick="navigator.clipboard.writeText('Oi! Tô interessado na Fazer 250 2010. Aceita uma proposta?').then(()=>{this.textContent='✅ Copiado!';setTimeout(()=>{this.textContent='💬 Copiar mensagem'},2000)});window.open('https://www.facebook.com/marketplace/item/885009201348145/','_blank')">💬 Copiar mensagem</button>
-    </div>
+    <div class="fipe-badge">R$ 1.578<span class="abaixo">abaixo FIPE</span></div>
+  </div>
+  <div class="card-body">
+    <div class="preco">R$ 9.500</div>
+    <div class="fipe-text">FIPE: R$ 11.078</div>
+    <div class="desc">2010 Yamaha fazer</div>
+  </div>
+  <div class="card-footer">
+    <a href="https://www.facebook.com/marketplace/item/885009201348145/" target="_blank" class="btn-ver">Ver anúncio</a>
+    <button class="btn-msg" onclick="navigator.clipboard.writeText('Oi! Tô interessado na Fazer 250 2010. Aceita uma proposta?').then(()=>{this.textContent='✅ Copiado!';setTimeout(()=>{this.textContent='💬 Copiar msg'},2000)});window.open('https://www.facebook.com/marketplace/item/885009201348145/','_blank')">💬 Copiar msg</button>
+    <label class="btn-visto" for="v7">Já vi</label>
+    <label class="btn-quente" for="qv7">🔥 Quente</label>
   </div>
 </div>
-
-
 
 <div class="varrida-header">🔍 12/07/2026 às 22h32 — 2 novo(s)</div>
 
-<!-- 1 -->
-<div class="item-wrap new" id="item-v1">
-  <input type="checkbox" class="cb-visto" id="v1"><label for="v1">Visto</label>
-  <input type="checkbox" class="cb-quente" id="qv1"><label for="qv1">🔥 Quente</label>
-  <div class="card">
-    <div class="card-header">
+<div class="item-wrap" id="item-v1">
+  <input type="checkbox" class="cb-visto" id="v1">
+  <input type="checkbox" class="cb-quente" id="qv1">
+  <div class="card-header">
+    <div class="header-left">
       <span class="modelo">Honda CG 150 Titan ESD 2007</span>
-      <span class="preco">R$ 8.000</span>
       <span class="cidade">📍 Sorocaba</span>
     </div>
-    <div class="card-body">
-      <div class="desc">60.000 km · Partida elétrica · Freio a disco · Vendendo pq comprou outra</div>
-      <div class="fipe">FIPE: R$ 9.684 · R$ 1.684 abaixo ✅</div>
-    </div>
-    <div class="card-footer">
-      <a href="https://www.facebook.com/marketplace/item/2760881094297037/" target="_blank" class="btn-ver">Ver anúncio</a>
-      <button class="btn-msg" onclick="navigator.clipboard.writeText('Oi! Vi seu anúncio da CG 150 Titan no Marketplace. Ainda tá disponível?').then(()=>{this.textContent='✅ Copiado!';setTimeout(()=>{this.textContent='💬 Copiar mensagem'},2000)});window.open('https://www.facebook.com/marketplace/item/2760881094297037/','_blank')">💬 Copiar mensagem</button>
-    </div>
+    <div class="fipe-badge">R$ 1.684<span class="abaixo">abaixo FIPE</span></div>
+  </div>
+  <div class="card-body">
+    <div class="preco">R$ 8.000</div>
+    <div class="fipe-text">FIPE: R$ 9.684</div>
+    <div class="desc">60.000 km · Partida elétrica · Freio a disco · Vendendo pq comprou outra</div>
+  </div>
+  <div class="card-footer">
+    <a href="https://www.facebook.com/marketplace/item/2760881094297037/" target="_blank" class="btn-ver">Ver anúncio</a>
+    <button class="btn-msg" onclick="navigator.clipboard.writeText('Oi! Vi a CG 150 Titan no Marketplace. Aceita uma proposta?').then(()=>{this.textContent='✅ Copiado!';setTimeout(()=>{this.textContent='💬 Copiar msg'},2000)});window.open('https://www.facebook.com/marketplace/item/2760881094297037/','_blank')">💬 Copiar msg</button>
+    <label class="btn-visto" for="v1">Já vi</label>
+    <label class="btn-quente" for="qv1">🔥 Quente</label>
   </div>
 </div>
 
-<!-- 2 -->
-<div class="item-wrap new" id="item-v2">
-  <input type="checkbox" class="cb-visto" id="v2"><label for="v2">Visto</label>
-  <input type="checkbox" class="cb-quente" id="qv2"><label for="qv2">🔥 Quente</label>
-  <div class="card">
-    <div class="card-header">
+<div class="item-wrap" id="item-v2">
+  <input type="checkbox" class="cb-visto" id="v2">
+  <input type="checkbox" class="cb-quente" id="qv2">
+  <div class="card-header">
+    <div class="header-left">
       <span class="modelo">Honda CG 150 Titan ESD 2008</span>
-      <span class="preco">R$ 8.000</span>
       <span class="cidade">📍 Sorocaba</span>
     </div>
-    <div class="card-body">
-      <div class="desc">10.000 km · Partida elétrica · Rodas de liga leve e pneus novos · Licenciada · Muito conservada</div>
-      <div class="fipe">FIPE: R$ 9.927 · R$ 1.927 abaixo ✅</div>
-    </div>
-    <div class="card-footer">
-      <a href="https://www.facebook.com/marketplace/item/1056735673690152/" target="_blank" class="btn-ver">Ver anúncio</a>
-      <button class="btn-msg" onclick="navigator.clipboard.writeText('Olá, tudo bem? Vi a CG 150 Titan que você tá vendendo. Pode me contar mais?').then(()=>{this.textContent='✅ Copiado!';setTimeout(()=>{this.textContent='💬 Copiar mensagem'},2000)});window.open('https://www.facebook.com/marketplace/item/1056735673690152/','_blank')">💬 Copiar mensagem</button>
-    </div>
+    <div class="fipe-badge">R$ 1.927<span class="abaixo">abaixo FIPE</span></div>
+  </div>
+  <div class="card-body">
+    <div class="preco">R$ 8.000</div>
+    <div class="fipe-text">FIPE: R$ 9.927</div>
+    <div class="desc">10.000 km · Partida elétrica · Rodas de liga leve e pneus novos · Licenciada · Muito conservada</div>
+  </div>
+  <div class="card-footer">
+    <a href="https://www.facebook.com/marketplace/item/1056735673690152/" target="_blank" class="btn-ver">Ver anúncio</a>
+    <button class="btn-msg" onclick="navigator.clipboard.writeText('Oi! Vi a CG 150 Titan 2008 que você tá vendendo. Aceita uma proposta?').then(()=>{this.textContent='✅ Copiado!';setTimeout(()=>{this.textContent='💬 Copiar msg'},2000)});window.open('https://www.facebook.com/marketplace/item/1056735673690152/','_blank')">💬 Copiar msg</button>
+    <label class="btn-visto" for="v2">Já vi</label>
+    <label class="btn-quente" for="qv2">🔥 Quente</label>
   </div>
 </div>
 
 <script>
 // Versão da página — ao mudar, limpa localStorage antigo
-var PAGE_VERSION = '2026-07-12-v3';
+var PAGE_VERSION = '2026-07-12-v4';
 if (localStorage.getItem('page_version') !== PAGE_VERSION) {
   localStorage.clear();
   localStorage.setItem('page_version', PAGE_VERSION);
@@ -454,19 +427,6 @@ document.querySelectorAll('input.cb-visto, input.cb-quente').forEach(function(cb
 document.addEventListener('change', function(e) {
   if (e.target.matches('input.cb-visto, input.cb-quente')) {
     localStorage.setItem(e.target.id, e.target.checked ? '1' : '0');
-  }
-});
-
-// Copiar mensagem ao clicar na textarea
-document.addEventListener('click', function(e) {
-  var ta = e.target.closest('.msg-text');
-  if (!ta) return;
-  ta.select();
-  document.execCommand('copy');
-  var label = ta.previousElementSibling;
-  if (label) {
-    label.textContent = '✅ Copiado! Agora cole no chat do Facebook.';
-    setTimeout(function() { label.textContent = '💬 Toque para copiar a mensagem:'; }, 3000);
   }
 });
 </script>
