@@ -438,6 +438,13 @@
 </div>
 
 <script>
+// Versão da página — ao mudar, limpa localStorage antigo
+var PAGE_VERSION = '2026-07-12-v3';
+if (localStorage.getItem('page_version') !== PAGE_VERSION) {
+  localStorage.clear();
+  localStorage.setItem('page_version', PAGE_VERSION);
+}
+
 // Restaurar estado salvo
 document.querySelectorAll('input.cb-visto, input.cb-quente').forEach(function(cb) {
   if (localStorage.getItem(cb.id) === '1') cb.checked = true;
